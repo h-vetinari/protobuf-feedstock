@@ -1,0 +1,44 @@
+From c63169a6663d2cd85482da6f254e37bf2e19ba74 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 28 Feb 2025 22:45:24 +1100
+Subject: [PATCH 10/10] link to our own abseil
+
+---
+ python/build_targets.bzl | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/python/build_targets.bzl b/python/build_targets.bzl
+index ee765ab4c..3178bbedd 100644
+--- a/python/build_targets.bzl
++++ b/python/build_targets.bzl
+@@ -6,6 +6,7 @@
+ #   //:protobuf_python
+ #   //:well_known_types_py_pb2
+ 
++load("@bazel_skylib//lib:selects.bzl", "selects")
+ load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+ load("@rules_python//python:defs.bzl", "py_library")
+ load("//:protobuf.bzl", "internal_py_proto_library")
+@@ -111,6 +112,10 @@ def build_targets(name):
+             ":allow_oversize_protos": ["-DPROTOBUF_PYTHON_ALLOW_OVERSIZE_PROTOS=1"],
+         }),
+         includes = ["."],
++        linkopts = selects.with_or({
++            "//python/dist:windows_x86_64": ["-labseil_dll"],
++            "//conditions:default": ["-labsl_status", "-labsl_strings"],
++        }),
+         linkshared = 1,
+         linkstatic = 1,
+         tags = [
+@@ -129,11 +134,6 @@ def build_targets(name):
+             "//src/google/protobuf/io:tokenizer",
+             "//src/google/protobuf/stubs:lite",
+             "//src/google/protobuf/util:differencer",
+-            "@com_google_absl//absl/container:flat_hash_map",
+-            "@com_google_absl//absl/log:absl_check",
+-            "@com_google_absl//absl/log:absl_log",
+-            "@com_google_absl//absl/status",
+-            "@com_google_absl//absl/strings",
+         ] + select({
+             "//conditions:default": [],
+             ":use_fast_cpp_protos": ["@system_python//:python_headers"],

@@ -24,6 +24,7 @@ source:
       - patches/0007-Hacky-windows-workarounds.patch  # [win]
       - patches/0008-Add-osx-64-and-linux-ppc64le-as-supported-wheel-tags.patch
       - patches/0009-link-to-upb-from-libprotobuf.patch
+      - patches/0010-link-to-our-own-abseil.patch
 
   {% set bz_url = "https://github.com/bazelbuild/bazel/releases/download" %}
   {% set bz_ver = "6.5.0" %}
