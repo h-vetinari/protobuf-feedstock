@@ -1,0 +1,52 @@
+From affaacd1b450a9b6f3d458dd753e217fd8becb08 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 28 Feb 2025 20:53:04 +1100
+Subject: [PATCH 9/9] link to upb from libprotobuf
+
+---
+ python/BUILD.bazel      | 16 ----------------
+ python/py_extension.bzl |  6 +++---
+ 2 files changed, 3 insertions(+), 19 deletions(-)
+
+diff --git a/python/BUILD.bazel b/python/BUILD.bazel
+index eeea16b8b..8994e2592 100644
+--- a/python/BUILD.bazel
++++ b/python/BUILD.bazel
+@@ -173,20 +173,4 @@ py_extension(
+         "//conditions:default": ["-Wno-pedantic"],
+     }),
+     target_compatible_with = select(_message_target_compatible_with),
+-    deps = [
+-        "//src/google/protobuf:descriptor_upb_reflection_proto",
+-        "//third_party/utf8_range",
+-        "//upb:base",
+-        "//upb:eps_copy_input_stream",
+-        "//upb:message",
+-        "//upb:message_compare",
+-        "//upb:message_copy",
+-        "//upb:port",
+-        "//upb:reflection",
+-        "//upb:text",
+-        "//upb:wire_reader",
+-        "//upb/hash",
+-        "//upb/util:def_to_proto",
+-        "//upb/util:required_fields",
+-    ],
+ )
+diff --git a/python/py_extension.bzl b/python/py_extension.bzl
+index 5fc2161e3..1438101da 100644
+--- a/python/py_extension.bzl
++++ b/python/py_extension.bzl
+@@ -24,9 +24,9 @@ def py_extension(name, srcs, copts, deps = [], **kwargs):
+             (
+                 "//python/dist:osx_x86_64",
+                 "//python/dist:osx_aarch64",
+-            ): ["-undefined", "dynamic_lookup"],
+-            "//python/dist:windows_x86_32": ["-static-libgcc"],
+-            "//conditions:default": [],
++            ): ["-Wl,-undefined,dynamic_lookup", "-lupb"],
++            "//python/dist:windows_x86_64": ["-llibupb"],
++            "//conditions:default": ["-lupb"],
+         }),
+         linkshared = True,
+         linkstatic = True,

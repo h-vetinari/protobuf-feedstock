@@ -23,6 +23,8 @@ source:
       - patches/0006-Compatible-windows-changes.patch
       - patches/0007-Hacky-windows-workarounds.patch  # [win]
       - patches/0008-Add-osx-64-and-linux-ppc64le-as-supported-wheel-tags.patch
+      - patches/0009-link-to-upb-from-libprotobuf.patch
+
   {% set bz_url = "https://github.com/bazelbuild/bazel/releases/download" %}
   {% set bz_ver = "6.5.0" %}
   - fn: bazel-standalone    # [unix]
@@ -56,7 +58,7 @@ requirements:
     - python
     - pip
     - setuptools
-    # - libprotobuf {{ lib_major ~ "." ~ version }}
+    - libprotobuf {{ lib_major ~ "." ~ version }}
   run:
     - python
   run_constrained:
